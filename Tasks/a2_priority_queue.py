@@ -76,10 +76,16 @@ class PriorityQueue:
 
         :return: None
         """
-        self.priority_queue.clear()
+        print(self.priority_queue)
+        for priority in self.priority_queue:
+            self.priority_queue[priority] = []
+        print(self.priority_queue)
         return None
 
 
 # q = PriorityQueue()
 # q.enqueue(3)
 # q.dequeue()
+# q.clear()
+
+
