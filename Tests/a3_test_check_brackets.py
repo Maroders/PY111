@@ -1,4 +1,5 @@
 import unittest
+
 from Tasks.a3_check_brackets import check_brackets
 
 
@@ -7,6 +8,7 @@ class MyTestCase(unittest.TestCase):
         self.assertFalse(check_brackets("(()("))
         self.assertFalse(check_brackets("(()))"))
         self.assertFalse(check_brackets("(()))"))
+        self.assertFalse(check_brackets("())(()(())"))  # добавил еще одну передаваемую строку (не отлавливал ")(" в середине строки)
         self.assertFalse(check_brackets(")("))
         self.assertFalse(check_brackets(")()("))
 
