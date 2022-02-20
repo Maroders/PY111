@@ -12,7 +12,7 @@ def binary_search(elem: int, arr: Sequence) -> Optional[int]:
     middle_index = len(arr) // 2
     left_border_index = 0
     print(left_border_index)
-    right_border_index = len(arr) - 1
+    right_border_index = len(arr)
     print(right_border_index)
 
     while True:
@@ -55,7 +55,8 @@ def binary_search(elem: int, arr: Sequence) -> Optional[int]:
         #     return middle_index
         if not arr[left_border_index:right_border_index]:
             return None
-
+        if middle_index == len(arr):
+            return None
 
 # sequence = [i for i in range(100)] + [101]
 # print(sequence)
@@ -95,9 +96,13 @@ def binary_search(elem: int, arr: Sequence) -> Optional[int]:
 # element_2 = 2
 # print(binary_search(element_2, sequence_2))
 
+# sequence_2 = [8, 9, 10]
+# element_2 = 10
+# print(binary_search(element_2, sequence_2))
+
 sequence_2 = [1, 2, 3]
-element_2 = 1
-print(binary_search(element_2, sequence_2))  # expect 1
+element_2 = 4
+print(binary_search(element_2, sequence_2))
 
 
 # Прошу прокомментировать 2 вопроса:
