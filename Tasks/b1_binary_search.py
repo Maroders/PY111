@@ -12,7 +12,7 @@ def binary_search(elem: int, arr: Sequence) -> Optional[int]:
     middle_index = len(arr) // 2
     left_border_index = 0
     print(left_border_index)
-    right_border_index = len(arr)
+    right_border_index = len(arr) - 1
     print(right_border_index)
 
     while True:
@@ -36,10 +36,23 @@ def binary_search(elem: int, arr: Sequence) -> Optional[int]:
                 middle_index = middle_index - 1
             if elem > arr[middle_index]:
                 middle_index = middle_index + 1
-        if len(arr[left_border_index:right_border_index]) == 1 and [elem] != arr[left_border_index:right_border_index]:
-            return None
         if len(arr[left_border_index:right_border_index]) == 1:
-            return middle_index
+            if elem < arr[middle_index]:
+                middle_index = middle_index - 1
+                if [elem] != arr[left_border_index:right_border_index]:
+                    return None
+                else:
+                    return middle_index
+            if elem > arr[middle_index]:
+                middle_index = middle_index + 1
+                if [elem] != arr[left_border_index:right_border_index]:
+                    return None
+                else:
+                    return middle_index
+        # if len(arr[left_border_index:right_border_index]) == 1 and [elem] != arr[left_border_index:right_border_index]:
+        #     return None
+        # if len(arr[left_border_index:right_border_index]) == 1:
+        #     return middle_index
         if not arr[left_border_index:right_border_index]:
             return None
 
@@ -82,6 +95,10 @@ def binary_search(elem: int, arr: Sequence) -> Optional[int]:
 # element_2 = 2
 # print(binary_search(element_2, sequence_2))
 
+sequence_2 = [1, 2, 3]
+element_2 = 1
+print(binary_search(element_2, sequence_2))  # expect 1
+
 
 # Прошу прокомментировать 2 вопроса:
 # Вопрос № 1:
@@ -95,3 +112,5 @@ def binary_search(elem: int, arr: Sequence) -> Optional[int]:
 #             return middle_index
 # Вопрос № 2:
 # не слишком ли много костылей? По сути вводил условие за условием под каждый юнит-тест. Но в итоге все тесты проходит.
+
+
