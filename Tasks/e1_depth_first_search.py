@@ -4,18 +4,18 @@ import networkx as nx
 from collections import deque
 import matplotlib.pyplot as plt
 
-def draw_graph(graph):
-    pos = nx.spring_layout(graph)
-    nx.draw_networkx_nodes(graph, pos)
-    nx.draw_networkx_labels(graph, pos)
-
-    for edge in graph.edges:
-        nx.draw_networkx_edges(
-            graph, pos,
-            edgelist=[(edge[0],edge[1])], connectionstyle="arc3,rad=0.2"
-            )
-
-    plt.show()
+# def draw_graph(graph):
+#     pos = nx.spring_layout(graph)
+#     nx.draw_networkx_nodes(graph, pos)
+#     nx.draw_networkx_labels(graph, pos)
+#
+#     for edge in graph.edges:
+#         nx.draw_networkx_edges(
+#             graph, pos,
+#             edgelist=[(edge[0],edge[1])], connectionstyle="arc3,rad=0.2"
+#             )
+#
+#     plt.show()
 
 def dfs(g: nx.Graph, start_node: Hashable) -> List[Hashable]:
     """
@@ -25,23 +25,41 @@ def dfs(g: nx.Graph, start_node: Hashable) -> List[Hashable]:
     :param start_node: starting node of search
     :return: list of nodes in the visited order
     """
-    # draw_graph(g)
-    path_nodes = []  # порядок обхода узлов
-    # g.nodes  # все узлы
-    # neighbours = g[start_node]  # соседи
+    # # draw_graph(g)
+    # path_nodes = []  # порядок обхода узлов
+    # # g.nodes  # все узлы
+    # # neighbours = g[start_node]  # соседи
+    # visited_nodes = {node: False for node in g.nodes}
+    # stack = deque()  # стэк из узлов
+    # stack.append(start_node)
+    # while stack:
+    #     current_node = stack.pop()
+    #     visited_nodes[current_node] = True
+    #     path_nodes.append(current_node)
+    #     for neighbour in g[current_node]:
+    #         if not visited_nodes[neighbour]:
+    #             stack.append(neighbour)
+    #
+    # print(path_nodes)
+    # return path_nodes
+
+
+# рекурсия:
+
     visited_nodes = {node: False for node in g.nodes}
-    stack = deque()  # стэк из узлов
-    stack.append(start_node)
-    while stack:
-        current_node = stack.pop()
-        visited_nodes[current_node] = True
-        path_nodes.append(current_node)
-        for neighbour in g[current_node]:
+    path_nodes = []
+
+    def search(node):
+        visited_nodes[node] = True
+        path_nodes.append(node)
+        for neighbour in g[node]:
             if not visited_nodes[neighbour]:
-                stack.append(neighbour)
+                search(neighbour)
 
+    search(start_node)
 
-    print(path_nodes)
+    print(path_nodes)  # проверка
+    print(visited_nodes)  # проверка
     return path_nodes
 
 
@@ -56,6 +74,4 @@ if __name__ == "__main__":
         ('C', 'F'),
         ('E', 'G'),
     ])
-    dfs(graph, 'A')
-
-#  + рекурсия
+    print(dfs(graph, 'A'))
