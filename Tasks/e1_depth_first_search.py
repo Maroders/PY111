@@ -46,6 +46,8 @@ def dfs(g: nx.Graph, start_node: Hashable) -> List[Hashable]:
 
 # рекурсия:
 
+
+
     visited_nodes = {node: False for node in g.nodes}
     path_nodes = []
 
