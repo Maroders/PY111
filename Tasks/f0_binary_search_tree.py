@@ -19,7 +19,7 @@ root = {'key': 8,  # корневой узел
             'value': 10,
             'left': None,
             'right': None
-        },
+        }
         }
 
 
@@ -85,32 +85,57 @@ class BinarySearchTree:
         :param key: key to be removed
         :return: deleted (key, value) pair or None
         """
+        start_node = self.root
 
-        def _remove(deleted_node: Optional[dict]):
+        def _find_min(current_node):
+            if current_node is None:
+                return None
+            return min(current_node["key"], _find_min(current_node["right"]), _find_min(current_node["left"]))
 
-            if deleted_node["right"] is None and deleted_node["left"] is None:
-                deleted_node_value = deleted_node["value"]
-                deleted_node = None
-                return deleted_node_value
-            if deleted_node["right"] is None or deleted_node["left"] is None:
-                insert_node = deleted_node["right"] if deleted_node["right"] is not None else deleted_node["left"]
-                deleted_node_value = deleted_node["value"]
-                deleted_node = None
-                self.insert(insert_node["key"], insert_node["value"])
-                return deleted_node_value
-            else:
-                insert_node = find_min(deleted_node["right"])
-                deleted_node_value = deleted_node["value"]
-                deleted_node = None
-                self.insert(insert_node["key"], insert_node["value"])
-                return deleted_node_value
+        def _remove(node: Optional[dict], root_node: Optional[dict] = None):
 
-        def find_min(node):
             if node is None:
                 return None
-            return min(node["key"], find_min(node["right"]), find_min(node["left"]))
 
-        return _remove(self.find(key))
+            if key == node["key"]:
+                if node["left"] is None and node["right"] is None:
+                    return_ = (node["key"], node["value"])
+                    node = None
+
+                    return return_
+
+                if node["left"] is None or node["right"] is None:
+                    if node["left"] is None:
+                        new_root = node["right"]
+                    if node["right"] is None:
+                        new_root = node["left"]
+                    # new_root = node["left"] if node["left"] is not None else node["right"]
+                    return_ = (node["key"], node["value"])
+                    if node["key"] < root_node["key"]:
+                        root_node["left"] = new_root
+
+                    if node["key"] > root_node["key"]:
+                        root_node["right"] = new_root
+
+                    node = None
+
+                    return return_
+
+                if node["left"] and node["right"] is not None:
+                    new_root = _find_min(node)
+                    return_ = (node["key"], node["value"])
+                    node["key"], node["value"] = new_root["key"], new_root["value"]
+                    _remove(new_root, node)
+                    return return_
+
+            else:
+                if key < node["key"]:
+                    return _remove(node["left"], node)
+
+                if key > node["key"]:
+                    return _remove(node["right"], node)
+
+        return _remove(start_node)
 
     def find(self, key: int) -> Optional[Any]:
         """
@@ -123,10 +148,10 @@ class BinarySearchTree:
 
             if node is None:  # базовый случай
                 raise KeyError()
+                # return None
 
             if key == node["key"]:
-                # return node["value"]
-                return node
+                return node["value"]
 
             # next_node = node["right"] if key > node["key"] else node["left"]
             # return _find(next_node)
@@ -159,7 +184,12 @@ if __name__ == '__main__':
     bst.insert(42, "Predictable")
     bst.insert(13, "And again")
     bst.insert(-999, "Nobody expects spanish inquisition!")
-    # print(bst.root)
-    # print(bst.find(13))
-    print(bst.remove(13))
     print(bst.root)
+    # print(bst.find(13))
+    bst.remove(13)
+    print(bst.root)
+
+
+    bst.root["left"] = bst.root["left"]["left"]
+    print(bst.root)
+
