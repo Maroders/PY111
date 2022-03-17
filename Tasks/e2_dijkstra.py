@@ -55,6 +55,15 @@ def dijkstra_algo(g: nx.DiGraph, starting_node: Hashable) -> Mapping[Hashable, U
             else:
                 return _way(min(costs, key=costs.get))
 
+    # dict_3 = {'C': 4, 'E': 4}
+    # flag = dict_3["C"]
+    # list_for_rec = []
+    # for i, j in dict_3.items():
+    #     if j == flag:
+    #         list_for_rec.append(i)
+
+    print(list_for_rec)
+
     _way(starting_node)
     # print(g["B"]["weight"])
     return final_costs
