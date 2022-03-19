@@ -17,7 +17,6 @@ def draw_graph(graph):
     plt.show()
 
 
-
 def dijkstra_algo(g: nx.DiGraph, starting_node: Hashable) -> Mapping[Hashable, Union[int, float]]:
     """
     Count shortest paths from starting node to all nodes of graph g
@@ -28,51 +27,36 @@ def dijkstra_algo(g: nx.DiGraph, starting_node: Hashable) -> Mapping[Hashable, U
     draw_graph(g)
     visited_nodes = []
     final_costs = {node: float("inf") for node in g}
-    print(final_costs)
     final_costs[starting_node] = 0
-    # visited_nodes.append(starting_node)
-    print(final_costs)
 
-    def _way(node):
+    def _way(node: Hashable) -> None:
+        """
+        Функция, рекурсивно обходящая соседей стартового узла
+        :param node: узел, от которого рассчитывается стоимость пути до его соседей в направленном графе
+        :return:
+        """
         if node in visited_nodes:
             return None
         if node not in visited_nodes:
             visited_nodes.append(node)
 
             for neighbour in g.neighbors(node):
-                if neighbour not in visited_nodes:
+                if (g[node][neighbour]["weight"] + final_costs[node]) < final_costs[neighbour]:
                     final_costs[neighbour] = g[node][neighbour]["weight"] + final_costs[node]
-
-                print(min(g[node][neighbour]))
 
             costs = {}
             for neighbour in g.neighbors(node):
                 if neighbour not in visited_nodes:
                     costs[neighbour] = g[node][neighbour]["weight"] + final_costs[node]
-                    # min_way_node = min(costs, key=costs.get)
+
             if not costs:
                 return None
             else:
-                return _way(min(costs, key=costs.get))
-
-    # dict_3 = {'C': 4, 'E': 4}
-    # flag = dict_3["C"]
-    # list_for_rec = []
-    # for i, j in dict_3.items():
-    #     if j == flag:
-    #         list_for_rec.append(i)
-
-    print(list_for_rec)
+                return _way(min(sorted(costs, key=costs.get)))
 
     _way(starting_node)
-    # print(g["B"]["weight"])
-    return final_costs
 
-            # final_costs[neighbour] = min(final_costs[neighbour], g[node][neighbour])
-            # print(final_costs)
-            #     print(f"{node}-{neighbour}:")
-            #     print(g[node][neighbour]["weight"])
-            #     print(min(final_costs[neighbour], g[node][neighbour]["weight"]))
+    return final_costs
 
 
 if __name__ == '__main__':
