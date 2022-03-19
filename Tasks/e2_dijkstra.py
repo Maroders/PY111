@@ -1,5 +1,20 @@
 from typing import Hashable, Mapping, Union
 import networkx as nx
+import matplotlib.pyplot as plt
+
+
+def draw_graph(graph):
+    pos = nx.spring_layout(graph)
+    nx.draw_networkx_nodes(graph, pos)
+    nx.draw_networkx_labels(graph, pos)
+
+    for edge in graph.edges:
+        nx.draw_networkx_edges(
+            graph, pos,
+            edgelist=[(edge[0], edge[1])], connectionstyle="arc3,rad=0.2"
+        )
+
+    plt.show()
 
 
 def dijkstra_algo(g: nx.DiGraph, starting_node: Hashable) -> Mapping[Hashable, Union[int, float]]:
@@ -9,5 +24,58 @@ def dijkstra_algo(g: nx.DiGraph, starting_node: Hashable) -> Mapping[Hashable, U
     :param starting_node: starting node from g
     :return: dict like {'node1': 0, 'node2': 10, '3': 33, ...} with path costs, where nodes are nodes from g
     """
-    print(g, starting_node)
-    return dict()
+    draw_graph(g)
+    visited_nodes = []
+    final_costs = {node: float("inf") for node in g}
+    final_costs[starting_node] = 0
+
+    def _way(node: Hashable) -> None:
+        """
+        Функция, рекурсивно обходящая соседей стартового узла
+        :param node: узел, от которого рассчитывается стоимость пути до его соседей в направленном графе
+        :return:
+        """
+        if node in visited_nodes:
+            return None
+        if node not in visited_nodes:
+            visited_nodes.append(node)
+
+            for neighbour in g.neighbors(node):
+                if (g[node][neighbour]["weight"] + final_costs[node]) < final_costs[neighbour]:
+                    final_costs[neighbour] = g[node][neighbour]["weight"] + final_costs[node]
+
+            costs = {}
+            for neighbour in g.neighbors(node):
+                if neighbour not in visited_nodes:
+                    costs[neighbour] = g[node][neighbour]["weight"] + final_costs[node]
+
+            if not costs:
+                return None
+            else:
+                return _way(min(sorted(costs, key=costs.get)))
+
+    _way(starting_node)
+
+    return final_costs
+
+
+if __name__ == '__main__':
+    G = nx.DiGraph()
+    G.add_nodes_from("ABCDEFG")
+    G.add_weighted_edges_from([
+        ("A", "B", 1),
+        ("B", "C", 3),
+        ("C", "E", 4),
+        ("E", "F", 3),
+        ("B", "E", 8),
+        ("C", "D", 1),
+        ("D", "E", 2),
+        ("B", "D", 2),
+        ("G", "D", 1),
+        ("D", "A", 2),
+    ])
+    # sn = "A"
+    # print(dijkstra_algo(G, sn))
+
+    sn = "D"
+    print(dijkstra_algo(G, sn))
